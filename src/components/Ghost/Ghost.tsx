@@ -1,3 +1,3 @@
 export default function Ghost() {
-  return <></>;
+  return <div className="ghost">G</div>;
 }
