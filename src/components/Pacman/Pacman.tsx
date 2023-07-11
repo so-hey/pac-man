@@ -1,4 +1,25 @@
-export default function PacMan() {
+import { Direction } from "../Game/Game";
+
+interface PacManProps {
+  direction: Direction;
+}
+
+const directionToDegrees = (direction: Direction) => {
+  switch (direction) {
+    case Direction.Up:
+      return -90;
+    case Direction.Right:
+      return 0;
+    case Direction.Down:
+      return 90;
+    case Direction.Left:
+      return 180;
+    default:
+      return 0;
+  }
+};
+
+export default function PacMan({ direction }: PacManProps) {
   return (
     <div className="pacman">
       <svg
@@ -14,6 +35,8 @@ export default function PacMan() {
               stroke: "none",
               fill: "yellow",
               fillOpacity: 1,
+              transform: `rotate(${directionToDegrees(direction)}deg)`,
+              transformOrigin: "center",
             }}
             d="M 14.820312 10.832031 C 13.199219 13.890625 9.578125 15.492188 6.066406 14.699219 C 2.558594 13.902344 0.0898438 10.921875 0.0976562 7.5 C 0.109375 4.074219 2.601562 1.109375 6.113281 0.332031 C 9.625 -0.441406 13.238281 1.179688 14.839844 4.25 L 7.875 7.519531 Z M 14.820312 10.832031 "
           />

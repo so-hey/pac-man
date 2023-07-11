@@ -1,3 +1,4 @@
+import usePacManGame from "../hooks/usePacManGame";
 import Board from "../Board/Board";
 import styles from "./Game.module.css";
 
@@ -9,9 +10,16 @@ enum Cell {
   Ghost,
 }
 
+enum Direction {
+  Up,
+  Down,
+  Left,
+  Right,
+}
+
 type GameBoard = Cell[][];
 
-const gameBoard: GameBoard = [
+const initialGameBoard: GameBoard = [
   [
     Cell.Wall,
     Cell.Wall,
@@ -39,17 +47,61 @@ const gameBoard: GameBoard = [
     Cell.Dot,
     Cell.Dot,
     Cell.Dot,
+    Cell.Dot,
+    Cell.Dot,
+    Cell.Dot,
+    Cell.Dot,
+    Cell.Dot,
+    Cell.Dot,
+    Cell.Dot,
+    Cell.Dot,
+    Cell.Dot,
+    Cell.Dot,
+    Cell.Dot,
+    Cell.Dot,
+    Cell.Dot,
+    Cell.Dot,
+    Cell.Dot,
+    Cell.Wall,
+  ],
+  [
+    Cell.Wall,
+    Cell.Dot,
     Cell.Wall,
     Cell.Dot,
     Cell.Dot,
+    Cell.Wall,
+    Cell.Dot,
+    Cell.Wall,
+    Cell.Wall,
+    Cell.Wall,
+    Cell.Wall,
+    Cell.Dot,
+    Cell.Wall,
     Cell.Dot,
     Cell.Dot,
+    Cell.Wall,
+    Cell.Dot,
+    Cell.Wall,
+    Cell.Dot,
+    Cell.Wall,
+  ],
+  [
+    Cell.Wall,
+    Cell.Dot,
+    Cell.Wall,
     Cell.Dot,
     Cell.Dot,
+    Cell.Wall,
     Cell.Dot,
+    Cell.Wall,
+    Cell.Ghost,
+    Cell.Ghost,
+    Cell.Wall,
     Cell.Dot,
-    Cell.Dot,
-    Cell.Dot,
+    Cell.Wall,
+    Cell.Wall,
+    Cell.Wall,
     Cell.Wall,
     Cell.Dot,
     Cell.Dot,
@@ -60,88 +112,44 @@ const gameBoard: GameBoard = [
     Cell.Wall,
     Cell.Dot,
     Cell.Wall,
-    Cell.Wall,
-    Cell.Wall,
+    Cell.Dot,
     Cell.Dot,
     Cell.Wall,
     Cell.Dot,
     Cell.Wall,
+    Cell.Ghost,
+    Cell.Ghost,
     Cell.Wall,
+    Cell.Dot,
     Cell.Wall,
+    Cell.Dot,
     Cell.Dot,
     Cell.Wall,
     Cell.Dot,
     Cell.Wall,
-    Cell.Wall,
-    Cell.Wall,
     Cell.Dot,
-    Cell.Wall,
     Cell.Wall,
   ],
   [
     Cell.Wall,
     Cell.Dot,
     Cell.Wall,
+    Cell.Wall,
+    Cell.Wall,
+    Cell.Wall,
     Cell.Dot,
-    Cell.Dot,
+    Cell.Wall,
+    Cell.Wall,
     Cell.Dot,
     Cell.Wall,
     Cell.Dot,
     Cell.Wall,
     Cell.Dot,
-    Cell.Wall,
     Cell.Dot,
     Cell.Wall,
-    Cell.Dot,
-    Cell.Dot,
-    Cell.Dot,
-    Cell.Wall,
-    Cell.Dot,
-    Cell.Wall,
-    Cell.Wall,
-  ],
-  [
-    Cell.Wall,
-    Cell.Dot,
-    Cell.Dot,
-    Cell.Dot,
-    Cell.Dot,
-    Cell.Dot,
-    Cell.Dot,
-    Cell.Dot,
     Cell.Dot,
     Cell.PacMan,
     Cell.Dot,
-    Cell.Dot,
-    Cell.Dot,
-    Cell.Dot,
-    Cell.Dot,
-    Cell.Dot,
-    Cell.Dot,
-    Cell.Dot,
-    Cell.Dot,
-    Cell.Wall,
-  ],
-  [
-    Cell.Wall,
-    Cell.Dot,
-    Cell.Wall,
-    Cell.Wall,
-    Cell.Wall,
-    Cell.Dot,
-    Cell.Wall,
-    Cell.Dot,
-    Cell.Wall,
-    Cell.Dot,
-    Cell.Wall,
-    Cell.Dot,
-    Cell.Wall,
-    Cell.Dot,
-    Cell.Wall,
-    Cell.Wall,
-    Cell.Wall,
-    Cell.Dot,
-    Cell.Wall,
     Cell.Wall,
   ],
   [
@@ -149,7 +157,6 @@ const gameBoard: GameBoard = [
     Cell.Dot,
     Cell.Dot,
     Cell.Dot,
-    Cell.Wall,
     Cell.Dot,
     Cell.Dot,
     Cell.Dot,
@@ -160,7 +167,8 @@ const gameBoard: GameBoard = [
     Cell.Dot,
     Cell.Dot,
     Cell.Dot,
-    Cell.Wall,
+    Cell.Dot,
+    Cell.Dot,
     Cell.Dot,
     Cell.Dot,
     Cell.Dot,
@@ -191,12 +199,20 @@ const gameBoard: GameBoard = [
 ];
 
 export default function Game() {
+  const initialPacManPos = { x: 17, y: 5 };
+  const initialGhostPos = { x: 8, y: 3 };
+
+  const { gameBoard, pacManPos, pacManDirection } = usePacManGame(
+    initialPacManPos,
+    initialGhostPos,
+    initialGameBoard
+  );
   return (
     <div className={styles.container}>
-      <Board board={gameBoard}></Board>
+      <Board board={gameBoard} direction={pacManDirection}></Board>
     </div>
   );
 }
 
 export type { GameBoard };
-export { Cell };
+export { Cell, Direction };
