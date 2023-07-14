@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Pac-Man Game Board Editor</title>
+    <style>
+      html {
+        font-family: sans-serif;
+      }
+      body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        color: white;
+        background-color: black;
+      }
+      .settings {
+        margin-bottom: 10px;
+        display: flex;
+      }
+      .types {
+        margin-right: 10px;
+      }
+      .size {
+        margin-right: 10px;
+      }
+      .size input {
+        width: 35px;
+      }
+      .board {
+        display: grid;
+        gap: 1px;
+      }
+      .cell {
+        height: 20px;
+        width: 20px;
+        border: 1px solid #999;
+        display: inline-block;
+      }
+      .empty {
+        border: 1px solid #999;
+      }
+      .wall {
+        background-color: blue;
+      }
+      .pacman {
+        background-color: #ff0;
+      }
+      .ghost {
+        background-color: #f00;
+      }
+      .dot {
+        background-color: white;
+      }
+      .selected {
+        opacity: 0.5;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script type="text/babel">
+      const cellTypes = ["empty", "wall", "pacman", "ghost", "dot"];
+      const HISTORY_LIMIT = 10;
+
+      function Cell({
+        type,
+        selected,
+        onPointerDown,
+        onPointerEnter,
+        onPointerUp,
+      }) {
+        return (
+          <div
+            className={`cell ${cellTypes[type]} ${selected ? "selected" : ""}`}
+            onPointerDown={onPointerDown}
+            onPointerEnter={onPointerEnter}
+            onPointerUp={onPointerUp}
+          />
+        );
+      }
+
+      function Board() {
+        const [boardSizeHeight, setBoardSizeHeight] = React.useState(20);
+        const [boardSizeWidth, setBoardSizeWidth] = React.useState(40);
+
+        const [{ board, history, future }, dispatch] = React.useReducer(
+          (state, action) => {
+            switch (action.type) {
+              case "set":
+                if (action.oldBoard === undefined) {
+                  return {
+                    ...state,
+                    board: action.board,
+                    history: [],
+                    future: [],
+                  };
+                }
+                return {
+                  ...state,
+                  board: action.board,
+                  history: [action.oldBoard, ...state.history],
+                  future: [],
+                };
+              case "undo":
+                if (state.history.length === 0) return state;
+                return {
+                  ...state,
+                  board: state.history[0],
+                  history: state.history.slice(1),
+                  future: [state.board, ...state.future],
+                };
+              case "redo":
+                if (state.future.length === 0) return state;
+                return {
+                  ...state,
+                  board: state.future[0],
+                  history: [state.board, ...state.history],
+                  future: state.future.slice(1),
+                };
+              default:
+                throw new Error();
+            }
+          },
+          {
+            board: Array(boardSizeHeight)
+              .fill()
+              .map(() => Array(boardSizeWidth).fill(0)),
+            history: [],
+            future: [],
+          }
+        );
+
+        const [currentType, setCurrentType] = React.useState(1);
+        const [isDragging, setIsDragging] = React.useState(false);
+        const [startPos, setStartPos] = React.useState({ x: 0, y: 0 });
+        const [endPos, setEndPos] = React.useState({ x: 0, y: 0 });
+
+        const handlePointerDown = (x, y) => {
+          setIsDragging(true);
+          setStartPos({ x, y });
+          setEndPos({ x, y });
+        };
+
+        const handlePointerEnter = (x, y) => {
+          if (isDragging) {
+            setEndPos({ x, y });
+          }
+        };
+
+        const handlePointerUp = () => {
+          setIsDragging(false);
+          const startX = Math.min(startPos.x, endPos.x);
+          const endX = Math.max(startPos.x, endPos.x);
+          const startY = Math.min(startPos.y, endPos.y);
+          const endY = Math.max(startPos.y, endPos.y);
+          const newBoard = board.map((row) => [...row]);
+          for (let x = startX; x <= endX; x++) {
+            for (let y = startY; y <= endY; y++) {
+              newBoard[y][x] = currentType;
+            }
+          }
+          dispatch({ type: "set", board: newBoard, oldBoard: board });
+        };
+
+        const undo = () => {
+          dispatch({ type: "undo", board: board });
+        };
+
+        const redo = () => {
+          dispatch({ type: "redo" });
+        };
+
+        const isInSelection = (x, y) => {
+          const startX = Math.min(startPos.x, endPos.x);
+          const endX = Math.max(startPos.x, endPos.x);
+          const startY = Math.min(startPos.y, endPos.y);
+          const endY = Math.max(startPos.y, endPos.y);
+          return x >= startX && x <= endX && y >= startY && y <= endY;
+        };
+
+        React.useEffect(() => {
+          const handleKeyDown = (e) => {
+            if (e.key === "z" && e.shiftKey) {
+              redo();
+            } else if (e.key === "z") {
+              undo();
+            }
+          };
+          window.addEventListener("keydown", handleKeyDown);
+          return () => {
+            window.removeEventListener("keydown", handleKeyDown);
+          };
+        }, [undo, redo]);
+
+        React.useEffect(() => {
+          const newBoard = Array(Number(boardSizeHeight))
+            .fill()
+            .map(() => Array(Number(boardSizeWidth)).fill(0));
+          dispatch({ type: "set", board: newBoard });
+        }, [boardSizeHeight, boardSizeWidth]);
+
+        return (
+          <div>
+            <div className="settings">
+              <div class="types">
+                {"type: "}
+                {cellTypes.map((type, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setCurrentType(index)}
+                    style={{
+                      backgroundColor: index === currentType ? "white" : "grey",
+                    }}
+                  >
+                    {type}
+                  </button>
+                ))}
+              </div>
+              <div class="size">
+                {"size: "}
+                <input
+                  type="number"
+                  min="1"
+                  max="99"
+                  value={boardSizeHeight}
+                  onChange={(e) => {
+                    setBoardSizeHeight(e.target.value);
+                  }}
+                />
+                {" × "}
+                <input
+                  type="number"
+                  min="1"
+                  max="99"
+                  value={boardSizeWidth}
+                  onChange={(e) => {
+                    setBoardSizeWidth(e.target.value);
+                  }}
+                />
+              </div>
+              <div class="io">
+                <button
+                  onClick={() => {
+                    const blob = new Blob([board], {
+                      type: "application/json",
+                    });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement("a");
+                    a.download = "board.json";
+                    a.href = url;
+                    a.click();
+                    a.remove();
+                  }}
+                >
+                  export
+                </button>
+                <button>import</button>
+              </div>
+            </div>
+            <div
+              class="board"
+              style={{
+                gridTemplateRows: `repeat(${boardSizeHeight}, 20px)`,
+                gridTemplateColumns: `repeat(${boardSizeWidth}, 20px)`,
+              }}
+            >
+              {board.map((row, y) => (
+                <>
+                  {row.map((cell, x) => (
+                    <Cell
+                      key={x}
+                      type={cell}
+                      selected={isDragging && isInSelection(x, y)}
+                      onPointerDown={() => handlePointerDown(x, y)}
+                      onPointerEnter={() => handlePointerEnter(x, y)}
+                      onPointerUp={handlePointerUp}
+                    />
+                  ))}
+                </>
+              ))}
+            </div>
+          </div>
+        );
+      }
+
+      ReactDOM.render(
+        <React.StrictMode>
+          <Board />
+        </React.StrictMode>,
+        document.getElementById("root")
+      );
+    </script>
+  </body>
+</html>
