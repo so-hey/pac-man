@@ -1,5 +1,5 @@
 import { Direction } from "../Game/Game";
-import styles from "./PacMan.module.css";
+import * as styles from "./PacMan.css";
 
 interface PacManProps {
   direction: Direction;

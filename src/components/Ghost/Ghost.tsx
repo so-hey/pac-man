@@ -1,4 +1,4 @@
-import styles from "./Ghost.module.css";
+import * as styles from "./Ghost.css";
 
 export default function Ghost() {
   return (

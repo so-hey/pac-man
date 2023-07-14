@@ -1,4 +1,4 @@
-import styles from "./Wall.module.css";
+import * as styles from "./Wall.css";
 
 export default function Wall() {
   return (

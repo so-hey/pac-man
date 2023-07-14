@@ -1,7 +1,7 @@
 import usePacManGame from "../hooks/usePacManGame";
 import Board from "../Board/Board";
 import { initialGameBoard } from "./initialBoard";
-import styles from "./Game.module.css";
+import * as styles from "./Game.css";
 
 enum Cell {
   Empty,

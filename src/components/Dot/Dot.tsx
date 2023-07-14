@@ -1,4 +1,4 @@
-import styles from "./Dot.module.css";
+import * as styles from "./Dot.css";
 
 export default function Dot() {
   return (
