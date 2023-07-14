@@ -1,6 +1,8 @@
+import styles from "./Ghost.module.css";
+
 export default function Ghost() {
   return (
-    <div className="ghost">
+    <div className={styles.ghost}>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="15px"

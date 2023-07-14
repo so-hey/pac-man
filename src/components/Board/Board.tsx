@@ -4,6 +4,7 @@ import PacMan from "../PacMan/PacMan";
 import Dot from "../Dot/Dot";
 import Wall from "../Wall/Wall";
 import styles from "./Board.module.css";
+// import { boardStyle, cellStyle } from "./Board.css.ts";
 
 interface BoardProps {
   board: GameBoard;

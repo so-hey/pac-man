@@ -1,7 +1,7 @@
 .board {
   display: grid;
   background-color: #000;
-  gap: 1px;
+  gap: 1px 1px;
   grid-template-rows: repeat(8, 1fr);
   grid-template-columns: repeat(20, 1fr);
 }

@@ -1,4 +1,5 @@
 import { Direction } from "../Game/Game";
+import styles from "./PacMan.module.css";
 
 interface PacManProps {
   direction: Direction;
@@ -21,7 +22,7 @@ const directionToDegrees = (direction: Direction) => {
 
 export default function PacMan({ direction }: PacManProps) {
   return (
-    <div className="pacman">
+    <div className={styles.pacman}>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="15px"
