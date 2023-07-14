@@ -21,21 +21,35 @@ enum Direction {
 type GameBoard = Cell[][];
 
 export default function Game() {
-  const initialPacManPos = { x: 17, y: 5 };
-  const initialGhostPos = { x: 8, y: 3 };
-  const initialGhostPos2 = { x: 3, y: 4 };
+  let initialPacManPos = { x: -1, y: -1 };
+  const initialGhostPositions: { x: number; y: number }[] = [];
 
-  const { gameBoard, pacManPos, pacManDirection, gameOver, gameClear } =
-    usePacManGame(
-      initialPacManPos,
-      initialGhostPos,
-      initialGhostPos2,
-      initialGameBoard
-    );
+  for (let y = 0; y < initialGameBoard.length; y++) {
+    for (let x = 0; x < initialGameBoard[y].length; x++) {
+      if (initialGameBoard[y][x] === Cell.PacMan) {
+        initialPacManPos = { x, y };
+      } else if (initialGameBoard[y][x] === Cell.Ghost) {
+        initialGhostPositions.push({ x, y });
+      }
+    }
+  }
+
+  const initialGhostPos = initialGhostPositions[0];
+  const initialGhostPos2 = initialGhostPositions[1];
+
+  const { gameBoard, pacManDirection, gameOver, gameClear } = usePacManGame(
+    initialPacManPos,
+    initialGhostPos,
+    initialGhostPos2,
+    initialGameBoard
+  );
   return (
     <>
       <div className={styles.container}>
         <Board board={gameBoard} direction={pacManDirection}></Board>
+        <div>
+          <button>START</button>
+        </div>
       </div>
       {gameOver && <div className={styles.gameOver}>Game Over</div>}
       {gameClear && <div className={styles.gameClear}>Game Clear</div>}
