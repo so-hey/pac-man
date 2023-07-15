@@ -13,10 +13,25 @@ const useGhost = (
   isReady: boolean
 ) => {
   const [ghostPos, setGhostPos] = useState(initialPos);
+  const [isWarming, setIsWarming] = useState(false);
 
   useEffect(() => {
     if (!isReady) return;
-    const movingGhostInterval = setInterval(() => {
+
+    const delayTimeout = setTimeout(() => {
+      setIsWarming(true);
+    }, 5000);
+    return () => {
+      clearTimeout(delayTimeout);
+    };
+  }, [isReady]);
+
+  useEffect(() => {
+    let movingGhostInterval: NodeJS.Timeout;
+
+    if (!isReady || !isWarming) return;
+
+    movingGhostInterval = setInterval(() => {
       let newGhostPos = ghostAI(ghostPos, gameBoard, pacManPos);
       if (
         0 <= newGhostPos.y &&
@@ -30,11 +45,13 @@ const useGhost = (
         setGhostPos(newGhostPos);
       }
     }, 200);
+
     return () => {
       clearInterval(movingGhostInterval);
     };
+
     // ghostAI dose not need to be in the dependency array, it includes to resolve eslint errors
-  }, [ghostPos, pacManPos, gameBoard, ghostAI, isReady]);
+  }, [ghostPos, pacManPos, gameBoard, ghostAI, isReady, isWarming]);
 
   return { ghostPos, setGhostPos };
 };

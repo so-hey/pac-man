@@ -66,9 +66,7 @@ export default function Game() {
                 onClick={() => {
                   const audio = new Audio("/pacman_introduction.mp3");
                   audio.play();
-                  setTimeout(() => {
-                    setIsReady(true);
-                  }, 5000);
+                  setIsReady(true);
                 }}
                 className={styles.startButton}
               ></button>

@@ -10,6 +10,19 @@ const usePacMan = (
   const [pacManDirection, setPacManDirection] = useState(Direction.Right);
   const movingInterval = useRef<NodeJS.Timeout | null>(null);
 
+  const [isWarming, setIsWarming] = useState(false);
+
+  useEffect(() => {
+    if (!isReady) return;
+
+    const delayTimeout = setTimeout(() => {
+      setIsWarming(true);
+    }, 5000);
+    return () => {
+      clearTimeout(delayTimeout);
+    };
+  }, [isReady]);
+
   const handleDirectionChange = (event: KeyboardEvent) => {
     switch (event.key) {
       case "ArrowUp":
@@ -37,7 +50,7 @@ const usePacMan = (
   }, []);
 
   useEffect(() => {
-    if (!isReady) return;
+    if (!isReady || !isWarming) return;
     if (movingInterval.current) {
       clearInterval(movingInterval.current);
     }
