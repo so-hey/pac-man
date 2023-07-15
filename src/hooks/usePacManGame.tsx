@@ -1,7 +1,7 @@
 import useGameStatus from "./useGameStatus";
 import useGhost from "./useGhost";
 import usePacMan from "./usePacman";
-import { Cell, GameBoard, Direction } from "../Game/Game";
+import { Cell, GameBoard } from "../components/Game/Game";
 
 const dy = [-1, 1, 0, 0];
 const dx = [0, 0, -1, 1];

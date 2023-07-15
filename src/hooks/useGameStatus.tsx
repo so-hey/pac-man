@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Cell, GameBoard, Direction } from "../Game/Game";
+import { Cell, GameBoard } from "../components/Game/Game";
 
 const useGameStatus = (
   gameBoard: GameBoard,
@@ -19,7 +19,7 @@ const useGameStatus = (
     } else if (!gameBoard.some((row) => row.includes(Cell.Dot))) {
       setGameClear(true);
     }
-  }, [pacManPos, ...ghostPositions, gameBoard]);
+  }, [pacManPos, ghostPositions, gameBoard]);
 
   return { gameOver, gameClear };
 };

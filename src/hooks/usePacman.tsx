@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { Cell, GameBoard, Direction } from "../Game/Game";
+import { Cell, GameBoard, Direction } from "../components/Game/Game";
 
 const usePacMan = (
   initialPos: { x: number; y: number },
@@ -70,7 +70,7 @@ const usePacMan = (
         clearInterval(movingInterval.current);
       }
     };
-  }, [pacManPos, pacManDirection]);
+  }, [pacManPos, pacManDirection, gameBoard]);
 
   return { pacManPos, pacManDirection, setPacManPos, setPacManDirection };
 };

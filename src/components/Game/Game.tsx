@@ -1,4 +1,4 @@
-import usePacManGame from "../hooks/usePacManGame";
+import usePacManGame from "../../hooks/usePacManGame";
 import Board from "../Board/Board";
 import { initialGameBoard } from "./initialBoard";
 import * as styles from "./Game.css";

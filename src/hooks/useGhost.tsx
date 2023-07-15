@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Cell, GameBoard } from "../Game/Game";
+import { Cell, GameBoard } from "../components/Game/Game";
 
 const useGhost = (
   initialPos: { y: number; x: number },
@@ -25,7 +25,8 @@ const useGhost = (
     return () => {
       clearInterval(movingGhostInterval);
     };
-  }, [ghostPos, pacManPos]);
+    // ghostAI dose not need to be in the dependency array, it includes to resolve eslint errors
+  }, [ghostPos, pacManPos, gameBoard, ghostAI]);
 
   return { ghostPos, setGhostPos };
 };
