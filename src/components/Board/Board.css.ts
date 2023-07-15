@@ -4,7 +4,7 @@ export const board = style({
   display: "grid",
   backgroundColor: "black",
   gap: "1px",
-  gridTemplateRows: "repeat(8, 1fr)",
+  gridTemplateRows: "repeat(11, 1fr)",
   gridTemplateColumns: "repeat(20, 1fr)",
 });
 

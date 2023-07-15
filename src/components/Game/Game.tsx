@@ -1,3 +1,4 @@
+import { useState } from "react";
 import usePacManGame from "../../hooks/usePacManGame";
 import Board from "../Board/Board";
 import { initialGameBoard } from "./initialBoard";
@@ -21,6 +22,8 @@ enum Direction {
 type GameBoard = Cell[][];
 
 export default function Game() {
+  const [isReady, setIsReady] = useState(false);
+
   let initialPacManPos = { x: -1, y: -1 };
   const initialGhostPositions: { x: number; y: number }[] = [];
 
@@ -41,18 +44,39 @@ export default function Game() {
     initialPacManPos,
     initialGhostPos,
     initialGhostPos2,
-    initialGameBoard
+    initialGameBoard,
+    isReady
   );
   return (
     <>
       <div className={styles.container}>
-        <Board board={gameBoard} direction={pacManDirection}></Board>
+        {isReady && (
+          <>
+            <Board board={gameBoard} direction={pacManDirection}></Board>
+            <div className={styles.message}>
+              {gameOver && <div className={styles.gameOver}>Game Over</div>}
+              {gameClear && <div className={styles.gameClear}>Game Clear</div>}
+            </div>
+          </>
+        )}
         <div>
-          <button>START</button>
+          {!isReady && (
+            <>
+              <button
+                onClick={() => {
+                  const audio = new Audio("/pacman_introduction.mp3");
+                  audio.play();
+                  setTimeout(() => {
+                    setIsReady(true);
+                  }, 5000);
+                }}
+                className={styles.startButton}
+              ></button>
+              <div>START</div>
+            </>
+          )}
         </div>
       </div>
-      {gameOver && <div className={styles.gameOver}>Game Over</div>}
-      {gameClear && <div className={styles.gameClear}>Game Clear</div>}
     </>
   );
 }

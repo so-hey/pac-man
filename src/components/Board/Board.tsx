@@ -3,7 +3,6 @@ import Ghost from "../Ghost/Ghost";
 import PacMan from "../PacMan/PacMan";
 import Dot from "../Dot/Dot";
 import Wall from "../Wall/Wall";
-// import styles from "./Board.module.css";
 import * as styles from "./Board.css";
 
 interface BoardProps {

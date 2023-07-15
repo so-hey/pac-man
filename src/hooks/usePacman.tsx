@@ -3,7 +3,8 @@ import { Cell, GameBoard, Direction } from "../components/Game/Game";
 
 const usePacMan = (
   initialPos: { x: number; y: number },
-  gameBoard: GameBoard
+  gameBoard: GameBoard,
+  isReady: boolean
 ) => {
   const [pacManPos, setPacManPos] = useState(initialPos);
   const [pacManDirection, setPacManDirection] = useState(Direction.Right);
@@ -36,6 +37,7 @@ const usePacMan = (
   }, []);
 
   useEffect(() => {
+    if (!isReady) return;
     if (movingInterval.current) {
       clearInterval(movingInterval.current);
     }
@@ -51,10 +53,20 @@ const usePacMan = (
           newPos.y = Math.min(newPos.y + 1, gameBoard.length - 1);
           break;
         case Direction.Left:
-          newPos.x = Math.max(newPos.x - 1, 0);
+          if (pacManPos.y === 5) {
+            newPos.x = Math.max(
+              (newPos.x - 1 + gameBoard[0].length) % gameBoard[0].length
+            );
+          } else {
+            newPos.x = Math.max(newPos.x - 1, 0);
+          }
           break;
         case Direction.Right:
-          newPos.x = Math.min(newPos.x + 1, gameBoard[0].length - 1);
+          if (pacManPos.y === 5) {
+            newPos.x = Math.min((newPos.x + 1) % gameBoard[0].length);
+          } else {
+            newPos.x = Math.min(newPos.x + 1, gameBoard[0].length - 1);
+          }
           break;
       }
 
@@ -70,7 +82,7 @@ const usePacMan = (
         clearInterval(movingInterval.current);
       }
     };
-  }, [pacManPos, pacManDirection, gameBoard]);
+  }, [pacManPos, pacManDirection, gameBoard, isReady]);
 
   return { pacManPos, pacManDirection, setPacManPos, setPacManDirection };
 };

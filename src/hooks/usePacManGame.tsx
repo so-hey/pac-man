@@ -88,23 +88,29 @@ const usePacManGame = (
   initialPos: { y: number; x: number },
   initialGhostPos: { y: number; x: number },
   initialGhostPos2: { y: number; x: number },
-  gameBoard: GameBoard
+  gameBoard: GameBoard,
+  isReady: boolean
 ) => {
-  const { pacManPos, pacManDirection } = usePacMan(initialPos, gameBoard);
+  const { pacManPos, pacManDirection } = usePacMan(
+    initialPos,
+    gameBoard,
+    isReady
+  );
 
   const { ghostPos } = useGhost(
     initialGhostPos,
     gameBoard,
     pacManPos,
-    shadowBlinkyAI
+    shadowBlinkyAI,
+    isReady
   );
   const { ghostPos: ghostPos2 } = useGhost(
     initialGhostPos2,
     gameBoard,
     pacManPos,
-    pokeyClydeAI
+    pokeyClydeAI,
+    isReady
   );
-
   const { gameOver, gameClear } = useGameStatus(gameBoard, pacManPos, [
     ghostPos,
     ghostPos2,
