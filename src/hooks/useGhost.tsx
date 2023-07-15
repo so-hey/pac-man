@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Cell, GameBoard } from "../components/Game/Game";
+import { Cell, GameBoard, GameStatus } from "../components/Game/Game";
 
 const useGhost = (
   initialPos: { y: number; x: number },
@@ -10,26 +10,19 @@ const useGhost = (
     gameBoard: GameBoard,
     pacManPos: { y: number; x: number }
   ) => { y: number; x: number },
-  isReady: boolean
+  gameStatus: GameStatus
 ) => {
   const [ghostPos, setGhostPos] = useState(initialPos);
-  const [isWarming, setIsWarming] = useState(false);
 
-  useEffect(() => {
-    if (!isReady) return;
-
-    const delayTimeout = setTimeout(() => {
-      setIsWarming(true);
-    }, 5000);
-    return () => {
-      clearTimeout(delayTimeout);
-    };
-  }, [isReady]);
+  // Temporarily save the state of the cell underfoot to avoid overriding Dot
+  const [foot, setFoot] = useState(Cell.Empty);
 
   useEffect(() => {
     let movingGhostInterval: NodeJS.Timeout;
 
-    if (!isReady || !isWarming) return;
+    if (gameStatus !== GameStatus.InProgress) {
+      return;
+    }
 
     movingGhostInterval = setInterval(() => {
       let newGhostPos = ghostAI(ghostPos, gameBoard, pacManPos);
@@ -40,9 +33,18 @@ const useGhost = (
         newGhostPos.x < gameBoard[0].length &&
         gameBoard[newGhostPos.y][newGhostPos.x] !== Cell.Wall
       ) {
-        gameBoard[ghostPos.y][ghostPos.x] = Cell.Empty;
-        gameBoard[newGhostPos.y][newGhostPos.x] = Cell.Ghost;
         setGhostPos(newGhostPos);
+        gameBoard[ghostPos.y][ghostPos.x] = foot;
+
+        // If the cell underfoot is Dot, restore it
+        if (
+          gameBoard[newGhostPos.y][newGhostPos.x] === Cell.Dot ||
+          gameBoard[newGhostPos.y][newGhostPos.x] === Cell.Empty
+        ) {
+          setFoot(gameBoard[newGhostPos.y][newGhostPos.x]);
+        }
+
+        gameBoard[newGhostPos.y][newGhostPos.x] = Cell.Ghost;
       }
     }, 200);
 
@@ -51,9 +53,9 @@ const useGhost = (
     };
 
     // ghostAI dose not need to be in the dependency array, it includes to resolve eslint errors
-  }, [ghostPos, pacManPos, gameBoard, ghostAI, isReady, isWarming]);
+  }, [ghostPos, pacManPos, gameBoard, ghostAI, foot, gameStatus]);
 
-  return { ghostPos, setGhostPos };
+  return { ghostPos };
 };
 
 export default useGhost;

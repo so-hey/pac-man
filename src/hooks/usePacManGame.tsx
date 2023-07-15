@@ -1,7 +1,7 @@
-import useGameStatus from "./useGameStatus";
+import { useState, useEffect } from "react";
 import useGhost from "./useGhost";
 import usePacMan from "./usePacman";
-import { Cell, GameBoard } from "../components/Game/Game";
+import { Cell, GameBoard, GameStatus } from "../components/Game/Game";
 
 const dy = [-1, 1, 0, 0];
 const dx = [0, 0, -1, 1];
@@ -88,13 +88,23 @@ const usePacManGame = (
   initialPos: { y: number; x: number },
   initialGhostPos: { y: number; x: number },
   initialGhostPos2: { y: number; x: number },
-  gameBoard: GameBoard,
-  isReady: boolean
+  gameBoard: GameBoard
 ) => {
+  const [gameStatus, setGameStatus] = useState<GameStatus>(
+    GameStatus.ReadyToStart
+  );
+
+  const startGame = (warmUpTime: number = 5000) => {
+    setGameStatus(GameStatus.Ready);
+    setTimeout(() => {
+      setGameStatus(GameStatus.InProgress);
+    }, warmUpTime);
+  };
+
   const { pacManPos, pacManDirection } = usePacMan(
     initialPos,
     gameBoard,
-    isReady
+    gameStatus
   );
 
   const { ghostPos } = useGhost(
@@ -102,21 +112,36 @@ const usePacManGame = (
     gameBoard,
     pacManPos,
     shadowBlinkyAI,
-    isReady
+    gameStatus
   );
+
   const { ghostPos: ghostPos2 } = useGhost(
     initialGhostPos2,
     gameBoard,
     pacManPos,
     pokeyClydeAI,
-    isReady
+    gameStatus
   );
-  const { gameOver, gameClear } = useGameStatus(gameBoard, pacManPos, [
-    ghostPos,
-    ghostPos2,
-  ]);
 
-  return { gameBoard, pacManDirection, gameOver, gameClear };
+  const ghostPositions = [ghostPos, ghostPos2];
+
+  useEffect(() => {
+    if (gameStatus !== GameStatus.InProgress) {
+      return;
+    }
+
+    if (
+      ghostPositions.some(
+        (ghostPos) => pacManPos.x === ghostPos.x && pacManPos.y === ghostPos.y
+      )
+    ) {
+      setGameStatus(GameStatus.GameOver);
+    } else if (!gameBoard.some((row) => row.includes(Cell.Dot))) {
+      setGameStatus(GameStatus.GameClear);
+    }
+  }, [pacManPos, ghostPositions, gameBoard, gameStatus]);
+
+  return { gameBoard, pacManDirection, gameStatus, startGame };
 };
 
 export default usePacManGame;

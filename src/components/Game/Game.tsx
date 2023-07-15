@@ -1,4 +1,3 @@
-import { useState } from "react";
 import usePacManGame from "../../hooks/usePacManGame";
 import Board from "../Board/Board";
 import { initialGameBoard } from "./initialBoard";
@@ -19,11 +18,17 @@ enum Direction {
   Right,
 }
 
+enum GameStatus {
+  ReadyToStart,
+  Ready,
+  InProgress,
+  GameOver,
+  GameClear,
+}
+
 type GameBoard = Cell[][];
 
 export default function Game() {
-  const [isReady, setIsReady] = useState(false);
-
   let initialPacManPos = { x: -1, y: -1 };
   const initialGhostPositions: { x: number; y: number }[] = [];
 
@@ -40,33 +45,41 @@ export default function Game() {
   const initialGhostPos = initialGhostPositions[0];
   const initialGhostPos2 = initialGhostPositions[1];
 
-  const { gameBoard, pacManDirection, gameOver, gameClear } = usePacManGame(
+  const { gameBoard, pacManDirection, gameStatus, startGame } = usePacManGame(
     initialPacManPos,
     initialGhostPos,
     initialGhostPos2,
-    initialGameBoard,
-    isReady
+    initialGameBoard
   );
+
+  console.log(gameStatus);
   return (
     <>
       <div className={styles.container}>
-        {isReady && (
+        {gameStatus !== GameStatus.ReadyToStart && (
           <>
             <Board board={gameBoard} direction={pacManDirection}></Board>
             <div className={styles.message}>
-              {gameOver && <div className={styles.gameOver}>Game Over</div>}
-              {gameClear && <div className={styles.gameClear}>Game Clear</div>}
+              {gameStatus === GameStatus.Ready && (
+                <div className={styles.ready}>Ready!</div>
+              )}
+              {gameStatus === GameStatus.GameOver && (
+                <div className={styles.gameOver}>Game Over</div>
+              )}
+              {gameStatus === GameStatus.GameClear && (
+                <div className={styles.gameClear}>Game Clear</div>
+              )}
             </div>
           </>
         )}
         <div>
-          {!isReady && (
+          {gameStatus === GameStatus.ReadyToStart && (
             <>
               <button
                 onClick={() => {
                   const audio = new Audio("/pacman_introduction.mp3");
                   audio.play();
-                  setIsReady(true);
+                  startGame();
                 }}
                 className={styles.startButton}
               ></button>
@@ -80,4 +93,4 @@ export default function Game() {
 }
 
 export type { GameBoard };
-export { Cell, Direction };
+export { Cell, Direction, GameStatus };

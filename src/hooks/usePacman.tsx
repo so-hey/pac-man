@@ -1,27 +1,19 @@
 import { useState, useEffect, useRef } from "react";
-import { Cell, GameBoard, Direction } from "../components/Game/Game";
+import {
+  Cell,
+  GameBoard,
+  Direction,
+  GameStatus,
+} from "../components/Game/Game";
 
 const usePacMan = (
   initialPos: { x: number; y: number },
   gameBoard: GameBoard,
-  isReady: boolean
+  gameStatus: GameStatus
 ) => {
   const [pacManPos, setPacManPos] = useState(initialPos);
   const [pacManDirection, setPacManDirection] = useState(Direction.Right);
   const movingInterval = useRef<NodeJS.Timeout | null>(null);
-
-  const [isWarming, setIsWarming] = useState(false);
-
-  useEffect(() => {
-    if (!isReady) return;
-
-    const delayTimeout = setTimeout(() => {
-      setIsWarming(true);
-    }, 5000);
-    return () => {
-      clearTimeout(delayTimeout);
-    };
-  }, [isReady]);
 
   const handleDirectionChange = (event: KeyboardEvent) => {
     switch (event.key) {
@@ -50,7 +42,10 @@ const usePacMan = (
   }, []);
 
   useEffect(() => {
-    if (!isReady || !isWarming) return;
+    if (gameStatus !== GameStatus.InProgress) {
+      return;
+    }
+
     if (movingInterval.current) {
       clearInterval(movingInterval.current);
     }
@@ -95,9 +90,9 @@ const usePacMan = (
         clearInterval(movingInterval.current);
       }
     };
-  }, [pacManPos, pacManDirection, gameBoard, isReady]);
+  }, [pacManPos, pacManDirection, gameBoard]);
 
-  return { pacManPos, pacManDirection, setPacManPos, setPacManDirection };
+  return { pacManPos, pacManDirection };
 };
 
 export default usePacMan;
