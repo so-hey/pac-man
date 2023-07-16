@@ -7,7 +7,10 @@ enum Cell {
   Wall,
   Dot,
   PacMan,
-  Ghost,
+  RedGhost,
+  PinkGhost,
+  BlueGhost,
+  OrangeGhost,
 }
 
 const initialGameBoard: GameBoard = [
@@ -130,10 +133,10 @@ const initialGameBoard: GameBoard = [
     Cell.Dot,
     Cell.Dot,
     Cell.Wall,
-    Cell.Ghost,
-    Cell.Ghost,
-    Cell.Ghost,
-    Cell.Ghost,
+    Cell.RedGhost,
+    Cell.PinkGhost,
+    Cell.BlueGhost,
+    Cell.OrangeGhost,
     Cell.Wall,
     Cell.Dot,
     Cell.Dot,

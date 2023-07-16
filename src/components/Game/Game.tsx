@@ -8,7 +8,10 @@ enum Cell {
   Wall,
   Dot,
   PacMan,
-  Ghost,
+  RedGhost,
+  PinkGhost,
+  BlueGhost,
+  OrangeGhost,
 }
 
 enum Direction {
@@ -30,29 +33,42 @@ type GameBoard = Cell[][];
 
 export default function Game() {
   let initialPacManPos = { x: -1, y: -1 };
-  const initialGhostPositions: { x: number; y: number }[] = [];
+  let initialRedGhostPos = { x: -1, y: -1 };
+  let initialPinkGhostPos = { x: -1, y: -1 };
+  let initialBlueGhostPos = { x: -1, y: -1 };
+  let initialOrangeGhostPos = { x: -1, y: -1 };
 
   for (let y = 0; y < initialGameBoard.length; y++) {
     for (let x = 0; x < initialGameBoard[y].length; x++) {
-      if (initialGameBoard[y][x] === Cell.PacMan) {
-        initialPacManPos = { x, y };
-      } else if (initialGameBoard[y][x] === Cell.Ghost) {
-        initialGhostPositions.push({ x, y });
+      switch (initialGameBoard[y][x]) {
+        case Cell.RedGhost:
+          initialRedGhostPos = { x, y };
+          break;
+        case Cell.PinkGhost:
+          initialPinkGhostPos = { x, y };
+          break;
+        case Cell.BlueGhost:
+          initialBlueGhostPos = { x, y };
+          break;
+        case Cell.OrangeGhost:
+          initialOrangeGhostPos = { x, y };
+          break;
+        case Cell.PacMan:
+          initialPacManPos = { x, y };
+          break;
       }
     }
   }
 
-  const initialGhostPos = initialGhostPositions[0];
-  const initialGhostPos2 = initialGhostPositions[1];
-
   const { gameBoard, pacManDirection, gameStatus, startGame } = usePacManGame(
     initialPacManPos,
-    initialGhostPos,
-    initialGhostPos2,
+    initialRedGhostPos,
+    initialPinkGhostPos,
+    initialBlueGhostPos,
+    initialOrangeGhostPos,
     initialGameBoard
   );
 
-  console.log(gameStatus);
   return (
     <>
       <div className={styles.container}>

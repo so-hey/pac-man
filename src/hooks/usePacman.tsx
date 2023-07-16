@@ -90,7 +90,7 @@ const usePacMan = (
         clearInterval(movingInterval.current);
       }
     };
-  }, [pacManPos, pacManDirection, gameBoard]);
+  }, [pacManPos, pacManDirection, gameBoard, gameStatus]);
 
   return { pacManPos, pacManDirection };
 };

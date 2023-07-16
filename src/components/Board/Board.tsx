@@ -23,8 +23,14 @@ export default function Board({ board, direction }: BoardProps) {
                 return <Dot key={j} />;
               case Cell.PacMan:
                 return <PacMan key={j} direction={direction} />;
-              case Cell.Ghost:
-                return <Ghost key={j} />;
+              case Cell.RedGhost:
+                return <Ghost key={j} color="red" />;
+              case Cell.PinkGhost:
+                return <Ghost key={j} color="pink" />;
+              case Cell.BlueGhost:
+                return <Ghost key={j} color="blue" />;
+              case Cell.OrangeGhost:
+                return <Ghost key={j} color="orange" />;
               default:
                 return <div key={j} className={styles.cell}></div>;
             }

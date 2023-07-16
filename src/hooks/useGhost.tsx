@@ -1,14 +1,22 @@
 import { useEffect, useState } from "react";
-import { Cell, GameBoard, GameStatus } from "../components/Game/Game";
+import {
+  Cell,
+  Direction,
+  GameBoard,
+  GameStatus,
+} from "../components/Game/Game";
 
 const useGhost = (
+  self: Cell,
   initialPos: { y: number; x: number },
   gameBoard: GameBoard,
   pacManPos: { y: number; x: number },
+  pacManDirection: Direction,
   ghostAI: (
     ghostPos: { y: number; x: number },
     gameBoard: GameBoard,
-    pacManPos: { y: number; x: number }
+    pacManPos: { y: number; x: number },
+    pacManDirection: Direction
   ) => { y: number; x: number },
   gameStatus: GameStatus
 ) => {
@@ -25,7 +33,12 @@ const useGhost = (
     }
 
     movingGhostInterval = setInterval(() => {
-      let newGhostPos = ghostAI(ghostPos, gameBoard, pacManPos);
+      let newGhostPos = ghostAI(
+        ghostPos,
+        gameBoard,
+        pacManPos,
+        pacManDirection
+      );
       if (
         0 <= newGhostPos.y &&
         newGhostPos.y < gameBoard.length &&
@@ -44,7 +57,7 @@ const useGhost = (
           setFoot(gameBoard[newGhostPos.y][newGhostPos.x]);
         }
 
-        gameBoard[newGhostPos.y][newGhostPos.x] = Cell.Ghost;
+        gameBoard[newGhostPos.y][newGhostPos.x] = self;
       }
     }, 200);
 
