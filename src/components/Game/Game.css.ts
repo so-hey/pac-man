@@ -9,6 +9,7 @@ export const gameClear = style({});
 export const message = style({
   height: "10px",
   textAlign: "center",
+  fontFamily: "'Press Start 2P', cursive",
 });
 
 export const startButton = style({
