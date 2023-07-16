@@ -77,13 +77,13 @@ export default function Game() {
             <Board board={gameBoard} direction={pacManDirection}></Board>
             <div className={styles.message}>
               {gameStatus === GameStatus.Ready && (
-                <div className={styles.ready}>Ready!</div>
+                <div className={styles.ready}>READY!</div>
               )}
               {gameStatus === GameStatus.GameOver && (
-                <div className={styles.gameOver}>Game Over</div>
+                <div className={styles.gameOver}>GAME OVER</div>
               )}
               {gameStatus === GameStatus.GameClear && (
-                <div className={styles.gameClear}>Game Clear</div>
+                <div className={styles.gameClear}>GAME CLEAR</div>
               )}
             </div>
           </>
