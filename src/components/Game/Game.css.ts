@@ -12,7 +12,7 @@ export const message = style({
   fontFamily: "'Press Start 2P', cursive",
 });
 
-export const startButton = style({
+export const Button = style({
   ":hover": {
     backgroundColor: "rgb(126, 0, 0)",
   },
@@ -22,4 +22,16 @@ export const startButton = style({
   borderRadius: "50px",
   border: "none",
   transition: "0.3s ease-in-out",
+  marginBottom: "10px",
+});
+
+export const buttonsContainer = style({
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+});
+
+export const buttonContainer = style({
+  textAlign: "center",
+  margin: "0 10px",
 });

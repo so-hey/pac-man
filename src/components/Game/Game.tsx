@@ -1,5 +1,18 @@
+import { useState } from "react";
 import usePacManGame from "../../hooks/usePacManGame";
 import Board from "../Board/Board";
+import Train from "../Train/Train";
+
+// TODO: If models are loaded in Train, data is lost when unmounted,
+// so models are loaded in the parent component Game and passed to the Train component.
+// import {
+//   controllerDataset,
+//   truncatedMobileNet,
+//   train,
+//   predict,
+//   getImage,
+//   init,
+// } from "../../services/model";
 import { initialGameBoard } from "./initialBoard";
 import * as styles from "./Game.css";
 
@@ -32,6 +45,8 @@ enum GameStatus {
 type GameBoard = Cell[][];
 
 export default function Game() {
+  const [isTraining, setIsTraining] = useState(false);
+
   let initialPacManPos = { x: -1, y: -1 };
   let initialRedGhostPos = { x: -1, y: -1 };
   let initialPinkGhostPos = { x: -1, y: -1 };
@@ -88,21 +103,41 @@ export default function Game() {
             </div>
           </>
         )}
-        <div>
-          {gameStatus === GameStatus.ReadyToStart && (
-            <>
-              <button
-                onClick={() => {
-                  const audio = new Audio("/pacman_introduction.mp3");
-                  audio.play();
-                  startGame();
-                }}
-                className={styles.startButton}
-              ></button>
-              <div>START</div>
-            </>
-          )}
-        </div>
+        {isTraining && (
+          <Train
+            back={() => {
+              setIsTraining(false);
+            }}
+          />
+        )}
+        {!isTraining && (
+          <>
+            {gameStatus === GameStatus.ReadyToStart && (
+              <div className={styles.buttonsContainer}>
+                <div className={styles.buttonContainer}>
+                  <button
+                    onClick={() => {
+                      const audio = new Audio("/pacman_introduction.mp3");
+                      audio.play();
+                      startGame();
+                    }}
+                    className={styles.Button}
+                  ></button>
+                  <div>START</div>
+                </div>
+                <div className={styles.buttonContainer}>
+                  <button
+                    onClick={() => {
+                      setIsTraining(true);
+                    }}
+                    className={styles.Button}
+                  ></button>
+                  <div>TRAIN</div>
+                </div>
+              </div>
+            )}
+          </>
+        )}
       </div>
     </>
   );

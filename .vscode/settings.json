@@ -1,3 +1,11 @@
 {
-  "cSpell.words": ["Blinky"]
+  "cSpell.words": [
+    "Blinky",
+    "conv",
+    "Crossentropy",
+    "mobilenet",
+    "pacman",
+    "relu",
+    "tfjs"
+  ]
 }
