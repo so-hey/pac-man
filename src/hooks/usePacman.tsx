@@ -9,10 +9,13 @@ import {
 const usePacMan = (
   initialPos: { x: number; y: number },
   gameBoard: GameBoard,
-  gameStatus: GameStatus
+  gameStatus: GameStatus,
+  prediction: number | null
 ) => {
   const [pacManPos, setPacManPos] = useState(initialPos);
-  const [pacManDirection, setPacManDirection] = useState(Direction.Right);
+  const [pacManDirection, setPacManDirection] = useState<Direction>(
+    Direction.Right
+  );
   const movingInterval = useRef<NodeJS.Timeout | null>(null);
 
   const handleDirectionChange = (event: KeyboardEvent) => {
@@ -34,6 +37,25 @@ const usePacMan = (
     }
   };
 
+  const handleDirectionChangeWithPrediction = (prediction: number) => {
+    switch (prediction) {
+      case 0:
+        setPacManDirection(Direction.Up);
+        break;
+      case 1:
+        setPacManDirection(Direction.Down);
+        break;
+      case 2:
+        setPacManDirection(Direction.Left);
+        break;
+      case 3:
+        setPacManDirection(Direction.Right);
+        break;
+      default:
+        break;
+    }
+  };
+
   useEffect(() => {
     window.addEventListener("keydown", handleDirectionChange);
     return () => {
@@ -41,6 +63,25 @@ const usePacMan = (
     };
   }, []);
 
+  useEffect(() => {
+    if (prediction === null) return;
+    switch (prediction) {
+      case 0:
+        setPacManDirection(Direction.Up);
+        break;
+      case 1:
+        setPacManDirection(Direction.Down);
+        break;
+      case 2:
+        setPacManDirection(Direction.Left);
+        break;
+      case 3:
+        setPacManDirection(Direction.Right);
+        break;
+      default:
+        break;
+    }
+  }, [prediction]);
   useEffect(() => {
     if (gameStatus !== GameStatus.InProgress) {
       return;
@@ -92,7 +133,7 @@ const usePacMan = (
     };
   }, [pacManPos, pacManDirection, gameBoard, gameStatus]);
 
-  return { pacManPos, pacManDirection };
+  return { pacManPos, pacManDirection, handleDirectionChangeWithPrediction };
 };
 
 export default usePacMan;

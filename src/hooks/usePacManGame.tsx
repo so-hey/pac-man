@@ -9,14 +9,35 @@ import {
   pokeyClydeAI,
 } from "../services/ghostLogics";
 
-const usePacManGame = (
-  initialPos: { y: number; x: number },
-  initialRedGhostPos: { y: number; x: number },
-  initialPinkGhostPos: { y: number; x: number },
-  initialBlueGhostPos: { y: number; x: number },
-  initialOrangeGhostPos: { y: number; x: number },
-  gameBoard: GameBoard
-) => {
+const usePacManGame = (gameBoard: GameBoard, prediction: number | null) => {
+  let initialPacManPos = { x: -1, y: -1 };
+  let initialRedGhostPos = { x: -1, y: -1 };
+  let initialPinkGhostPos = { x: -1, y: -1 };
+  let initialBlueGhostPos = { x: -1, y: -1 };
+  let initialOrangeGhostPos = { x: -1, y: -1 };
+
+  for (let y = 0; y < gameBoard.length; y++) {
+    for (let x = 0; x < gameBoard[y].length; x++) {
+      switch (gameBoard[y][x]) {
+        case Cell.RedGhost:
+          initialRedGhostPos = { x, y };
+          break;
+        case Cell.PinkGhost:
+          initialPinkGhostPos = { x, y };
+          break;
+        case Cell.BlueGhost:
+          initialBlueGhostPos = { x, y };
+          break;
+        case Cell.OrangeGhost:
+          initialOrangeGhostPos = { x, y };
+          break;
+        case Cell.PacMan:
+          initialPacManPos = { x, y };
+          break;
+      }
+    }
+  }
+
   const [gameStatus, setGameStatus] = useState<GameStatus>(
     GameStatus.ReadyToStart
   );
@@ -28,11 +49,8 @@ const usePacManGame = (
     }, warmUpTime);
   };
 
-  const { pacManPos, pacManDirection } = usePacMan(
-    initialPos,
-    gameBoard,
-    gameStatus
-  );
+  const { pacManPos, pacManDirection, handleDirectionChangeWithPrediction } =
+    usePacMan(initialPacManPos, gameBoard, gameStatus, prediction);
 
   const { ghostPos: redGhostPos } = useGhost(
     Cell.RedGhost,
@@ -97,7 +115,13 @@ const usePacManGame = (
     }
   }, [pacManPos, ghostPositions, gameBoard, gameStatus]);
 
-  return { gameBoard, pacManDirection, gameStatus, startGame };
+  return {
+    gameBoard,
+    pacManDirection,
+    handleDirectionChangeWithPrediction,
+    gameStatus,
+    startGame,
+  };
 };
 
 export default usePacManGame;

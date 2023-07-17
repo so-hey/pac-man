@@ -9,14 +9,18 @@ let webcam: any;
 
 class ControllerDataset {
   numClasses: number;
+  exampleCount: number[];
   xs: tf.Tensor | undefined;
   ys: tf.Tensor | undefined;
 
   constructor(numClasses: number) {
     this.numClasses = numClasses;
+    this.exampleCount = Array(numClasses).fill(0);
   }
 
   addExample(example: tf.Tensor, label: number) {
+    this.exampleCount[label]++;
+
     const y = tf.tidy(() =>
       tf.oneHot(tf.tensor1d([label]).toInt(), this.numClasses)
     );
@@ -35,6 +39,7 @@ class ControllerDataset {
       oldY.dispose();
       y.dispose();
     }
+    return this.exampleCount[label];
   }
 }
 
