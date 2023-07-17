@@ -751,7 +751,7 @@ module.exports = function (webpackEnv) {
           },
         }),
 
-      new VanillaExtractPlugin(),
+      // new VanillaExtractPlugin(),
     ].filter(Boolean),
     // Turn off performance processing because we utilize
     // our own hints via the FileSizeReporter
