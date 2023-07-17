@@ -93,16 +93,11 @@ export default function Game() {
       <video
         ref={webcamRef}
         id="webcam"
-        autoPlay
-        playsInline
         muted
         height={224}
         width={224}
         style={{
           display: "none",
-          width: "112px",
-          height: "112px",
-          WebkitTransform: "scaleX(-1)",
         }}
       />
       <div className={styles.container}>
@@ -212,7 +207,7 @@ export default function Game() {
               </div>
 
               <video
-                ref={webcamRef}
+                id="webcamDummy"
                 autoPlay
                 playsInline
                 muted

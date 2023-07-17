@@ -151,6 +151,10 @@ async function init() {
     webcam = await tfd.webcam(
       document.getElementById("webcam") as HTMLVideoElement
     );
+    const dummyCam = await tfd.webcam(
+      document.getElementById("webcamDummy") as HTMLVideoElement
+    );
+    await dummyCam.capture();
   } catch (e) {
     console.log(e);
     return;
