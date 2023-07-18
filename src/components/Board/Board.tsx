@@ -1,8 +1,8 @@
 import { GameBoard, Cell, Direction } from "../Game/Game";
-import Ghost from "../Ghost/Ghost";
-import PacMan from "../PacMan/PacMan";
-import Dot from "../Dot/Dot";
-import Wall from "../Wall/Wall";
+import Ghost from "./Ghost/Ghost";
+import PacMan from "./PacMan/PacMan";
+import Dot from "./Dot/Dot";
+import Wall from "./Wall/Wall";
 import * as styles from "./Board.css";
 
 interface BoardProps {

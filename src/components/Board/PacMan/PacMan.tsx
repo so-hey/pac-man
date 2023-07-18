@@ -1,4 +1,4 @@
-import { Direction } from "../Game/Game";
+import { Direction } from "../../Game/Game";
 import * as styles from "./PacMan.css";
 
 interface PacManProps {
