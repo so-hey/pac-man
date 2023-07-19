@@ -16,23 +16,24 @@ export default function Board({ board, direction }: BoardProps) {
       {board.map((row, i) => (
         <>
           {row.map((cell, j) => {
+            const idx = i * row.length + j;
             switch (cell) {
               case Cell.Wall:
-                return <Wall />;
+                return <Wall key={idx} />;
               case Cell.Dot:
-                return <Dot key={j} />;
+                return <Dot key={idx} />;
               case Cell.PacMan:
-                return <PacMan key={j} direction={direction} />;
+                return <PacMan key={idx} direction={direction} />;
               case Cell.RedGhost:
-                return <Ghost key={j} color="red" />;
+                return <Ghost key={idx} color="red" />;
               case Cell.PinkGhost:
-                return <Ghost key={j} color="pink" />;
+                return <Ghost key={idx} color="pink" />;
               case Cell.BlueGhost:
-                return <Ghost key={j} color="blue" />;
+                return <Ghost key={idx} color="blue" />;
               case Cell.OrangeGhost:
-                return <Ghost key={j} color="orange" />;
+                return <Ghost key={idx} color="orange" />;
               default:
-                return <div key={j} className={styles.cell}></div>;
+                return <div key={idx} className={styles.cell}></div>;
             }
           })}
         </>

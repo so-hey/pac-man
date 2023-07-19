@@ -1,11 +1,12 @@
 import * as tf from "@tensorflow/tfjs";
 import * as tfd from "@tensorflow/tfjs-data";
+import { WebcamIterator } from "@tensorflow/tfjs-data/dist/iterators/webcam_iterator";
 import { Dispatch } from "react";
 
 const NUM_CLASSES = 4;
 
 // TODO: add type of webcam
-let webcam: any;
+let webcam: WebcamIterator;
 
 class ControllerDataset {
   numClasses: number;
@@ -104,46 +105,47 @@ async function train(
     batchSize,
     epochs,
     callbacks: {
-      onBatchEnd: async (batch, logs) => {
+      onBatchEnd: async (_, logs) => {
         setLoss(logs?.loss as number);
       },
     },
   });
 }
 
-let isPredicting = true;
-
 async function predict() {
-  while (isPredicting) {
-    const img = await getImage();
+  const img = (await getImage()) as tf.Tensor<tf.Rank>;
 
-    const embeddings = truncatedMobileNet.predict(img);
-
-    const predictions = model.predict(embeddings);
-
-    if (Array.isArray(predictions)) {
-      throw new Error("Predictions is not an array");
-    }
-
-    const predictedClass = predictions.as1D().argMax();
-    const classId = (await predictedClass.data())[0];
-    img.dispose();
-
-    await tf.nextFrame();
-    return classId;
+  if (img === undefined) {
+    return -1;
   }
+
+  const embeddings = truncatedMobileNet.predict(img);
+  const predictions = model.predict(embeddings);
+
+  if (Array.isArray(predictions)) {
+    throw new Error("Predictions is not an array");
+  }
+
+  const predictedClass = predictions.as1D().argMax();
+  const classId = (await predictedClass.data())[0];
+  img.dispose();
+
+  await tf.nextFrame();
+  return classId;
 }
 
-async function getImage() {
-  if (!webcam) {
-    return;
-  }
+async function getImage(): Promise<tf.Tensor<tf.Rank>> {
+  // if (!webcam) {
+  //   return;
+  // }
   const img = await webcam.capture();
   const processedImg = tf.tidy(() =>
     img.expandDims(0).toFloat().div(127).sub(1)
   );
   img.dispose();
-  return processedImg;
+
+  const embedImg = truncatedMobileNet.predict(processedImg);
+  return embedImg as tf.Tensor<tf.Rank>;
 }
 
 async function init() {
@@ -166,11 +168,4 @@ async function init() {
   screenShot.dispose();
 }
 
-export {
-  controllerDataset,
-  truncatedMobileNet,
-  train,
-  predict,
-  getImage,
-  init,
-};
+export { controllerDataset, train, predict, getImage, init };

@@ -1,5 +1,35 @@
 import { style } from "@vanilla-extract/css";
 
+export const back = style({
+  marginBottom: "2rem",
+  cursor: "pointer",
+});
+
+export const backText = style({
+  textDecoration: "underline",
+});
+
+export const box = style({
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  justifyContent: "center",
+  border: "1px solid white",
+  cursor: "pointer",
+  userSelect: "none",
+});
+
+export const predicted = style({
+  border: "1px solid green",
+});
+
+export const field = style({
+  display: "grid",
+  gridTemplateColumns: "repeat(3, 1fr)",
+  gridTemplateRows: "repeat(3, 1fr)",
+  gap: "10px",
+});
+
 export const container = style({});
 
 export const ready = style({});

@@ -1,13 +1,9 @@
 import { useState, useEffect, useRef } from "react";
 import usePacManGame from "../../hooks/usePacManGame";
 import Board from "../Board/Board";
-import styles2 from "./Game.module.css";
 
-// TODO: If models are loaded in Train, data is lost when unmounted,
-// so models are loaded in the parent component Game and passed to the Train component.
 import {
   controllerDataset,
-  truncatedMobileNet,
   train,
   predict,
   getImage,
@@ -45,12 +41,12 @@ enum GameStatus {
 type GameBoard = Cell[][];
 
 export default function Game() {
-  const [initialGameBoard, setInitialGameBoard] = useState<GameBoard>(
+  const [initialGameBoard] = useState<GameBoard>(
     _initialGameBoard.map((row) => [...row])
   );
   const [isTraining, setIsTraining] = useState(false);
 
-  const [prediction, setPrediction] = useState(null);
+  const [prediction, setPrediction] = useState<number | null>(null);
   const { pacManDirection, gameStatus, startGame } = usePacManGame(
     initialGameBoard,
     prediction
@@ -119,7 +115,7 @@ export default function Game() {
               onClick={() => {
                 setInitialGameBoard(originalBoard.map((row) => [...row]));
                 startGame();
-                const audio = new Audio("/pacman_introduction.mp3");
+                const audio = new Audio("/pacman_intro.mp3");
                 audio.play();
               }}
             >
@@ -134,7 +130,7 @@ export default function Game() {
                 <div className={styles.buttonContainer}>
                   <button
                     onClick={() => {
-                      const audio = new Audio("/pacman_introduction.mp3");
+                      const audio = new Audio("/pacman_intro.mp3");
                       audio.play();
                       startGame();
                     }}
@@ -161,21 +157,18 @@ export default function Game() {
               onClick={() => {
                 setIsTraining(false);
               }}
-              className={styles2.back}
+              className={styles.back}
             >
-              <p className={styles2.backText}>Back</p>
+              <p className={styles.backText}>Back</p>
             </div>
 
-            <div className={styles2.field}>
+            <div className={styles.field}>
               <div></div>
               <div
-                className={styles2.box}
+                className={styles.box}
                 onClick={async () => {
                   const img = await getImage();
-                  controllerDataset.addExample(
-                    truncatedMobileNet.predict(img),
-                    0
-                  );
+                  controllerDataset.addExample(img, 0);
                   setSampleCountUp(controllerDataset.exampleCount[0]);
                 }}
                 style={{
@@ -188,13 +181,10 @@ export default function Game() {
               </div>
               <div></div>
               <div
-                className={styles2.box}
+                className={styles.box}
                 onClick={async () => {
                   const img = await getImage();
-                  controllerDataset.addExample(
-                    truncatedMobileNet.predict(img),
-                    2
-                  );
+                  controllerDataset.addExample(img, 2);
                   setSampleCountLeft(controllerDataset.exampleCount[2]);
                 }}
                 style={{
@@ -220,13 +210,10 @@ export default function Game() {
                 }}
               />
               <div
-                className={styles2.box}
+                className={styles.box}
                 onClick={async () => {
                   const img = await getImage();
-                  controllerDataset.addExample(
-                    truncatedMobileNet.predict(img),
-                    3
-                  );
+                  controllerDataset.addExample(img, 3);
                   setSampleCountRight(controllerDataset.exampleCount[3]);
                 }}
                 style={{
@@ -237,15 +224,12 @@ export default function Game() {
                 RIGHT
                 <p>{sampleCountRight}</p>
               </div>
-              <div className={styles2.box}>OPTION</div>
+              <div className={styles.box}>OPTION</div>
               <div
-                className={styles2.box}
+                className={styles.box}
                 onClick={async () => {
                   const img = await getImage();
-                  controllerDataset.addExample(
-                    truncatedMobileNet.predict(img),
-                    1
-                  );
+                  controllerDataset.addExample(img, 1);
                   setSampleCountDown(controllerDataset.exampleCount[1]);
                 }}
                 style={{
@@ -256,7 +240,7 @@ export default function Game() {
                 DOWN <p>{sampleCountDown}</p>
               </div>
               <div
-                className={styles2.box}
+                className={styles.box}
                 onClick={() => {
                   train(setLoss);
                   setIsTrained(true);

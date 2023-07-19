@@ -119,8 +119,7 @@ const speedyPinkyAI = (
 const bashfulInkyAI = (
   ghostPos: { y: number; x: number },
   gameBoard: GameBoard,
-  pacManPos: { y: number; x: number },
-  pacManDirection: Direction
+  pacManPos: { y: number; x: number }
 ) => {
   const newGhostPos = { ...ghostPos };
 
