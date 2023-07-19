@@ -68,7 +68,7 @@ const useGhost = (
     // ghostAI dose not need to be in the dependency array, it includes to resolve eslint errors
   }, [ghostPos, pacManPos, gameBoard, ghostAI, foot, gameStatus]);
 
-  return { ghostPos };
+  return { ghostPos, setGhostPos };
 };
 
 export default useGhost;

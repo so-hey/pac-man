@@ -1,11 +1,11 @@
 import { style } from "@vanilla-extract/css";
 
-export const back = style({
+export const backButton = style({
   marginBottom: "2rem",
   cursor: "pointer",
 });
 
-export const backText = style({
+export const underline = style({
   textDecoration: "underline",
 });
 
@@ -53,6 +53,15 @@ export const Button = style({
   border: "none",
   transition: "0.3s ease-in-out",
   marginBottom: "10px",
+});
+
+export const restartButton = style({
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  textAlign: "center",
+  transform: "translate(-50%, -50%)",
+  cursor: "pointer",
 });
 
 export const buttonsContainer = style({

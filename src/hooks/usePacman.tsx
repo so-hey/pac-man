@@ -82,6 +82,7 @@ const usePacMan = (
         break;
     }
   }, [prediction]);
+
   useEffect(() => {
     if (gameStatus !== GameStatus.InProgress) {
       return;
@@ -133,7 +134,12 @@ const usePacMan = (
     };
   }, [pacManPos, pacManDirection, gameBoard, gameStatus]);
 
-  return { pacManPos, pacManDirection, handleDirectionChangeWithPrediction };
+  return {
+    pacManPos,
+    setPacManPos,
+    pacManDirection,
+    handleDirectionChangeWithPrediction,
+  };
 };
 
 export default usePacMan;

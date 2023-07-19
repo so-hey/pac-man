@@ -9,16 +9,24 @@ import {
   pokeyClydeAI,
 } from "../services/ghostLogics";
 
-const usePacManGame = (gameBoard: GameBoard, prediction: number | null) => {
+const usePacManGame = (
+  initialGameBoard: GameBoard,
+  prediction: number | null
+) => {
+  const originalGameBoard = initialGameBoard.map((row) => [...row]);
+  const [gameBoard, setGameBoard] = useState<GameBoard>(
+    originalGameBoard.map((row) => [...row])
+  );
+
   let initialPacManPos = { x: -1, y: -1 };
   let initialRedGhostPos = { x: -1, y: -1 };
   let initialPinkGhostPos = { x: -1, y: -1 };
   let initialBlueGhostPos = { x: -1, y: -1 };
   let initialOrangeGhostPos = { x: -1, y: -1 };
 
-  for (let y = 0; y < gameBoard.length; y++) {
-    for (let x = 0; x < gameBoard[y].length; x++) {
-      switch (gameBoard[y][x]) {
+  for (let y = 0; y < initialGameBoard.length; y++) {
+    for (let x = 0; x < initialGameBoard[y].length; x++) {
+      switch (initialGameBoard[y][x]) {
         case Cell.RedGhost:
           initialRedGhostPos = { x, y };
           break;
@@ -42,17 +50,32 @@ const usePacManGame = (gameBoard: GameBoard, prediction: number | null) => {
     GameStatus.ReadyToStart
   );
 
+  const readyGame = () => {
+    setGameStatus(GameStatus.ReadyToStart);
+    console.log(gameStatus);
+  };
+
   const startGame = (warmUpTime: number = 5000) => {
     setGameStatus(GameStatus.Ready);
+    setGameBoard(originalGameBoard.map((row) => [...row]));
+    setRedGhostPos(initialRedGhostPos);
+    setPinkGhostPos(initialPinkGhostPos);
+    setBlueGhostPos(initialBlueGhostPos);
+    setOrangeGhostPos(initialOrangeGhostPos);
+    setPacManPos(initialPacManPos);
     setTimeout(() => {
       setGameStatus(GameStatus.InProgress);
     }, warmUpTime);
   };
 
-  const { pacManPos, pacManDirection, handleDirectionChangeWithPrediction } =
-    usePacMan(initialPacManPos, gameBoard, gameStatus, prediction);
+  const {
+    pacManPos,
+    setPacManPos,
+    pacManDirection,
+    handleDirectionChangeWithPrediction,
+  } = usePacMan(initialPacManPos, gameBoard, gameStatus, prediction);
 
-  const { ghostPos: redGhostPos } = useGhost(
+  const { ghostPos: redGhostPos, setGhostPos: setRedGhostPos } = useGhost(
     Cell.RedGhost,
     initialRedGhostPos,
     gameBoard,
@@ -62,7 +85,7 @@ const usePacManGame = (gameBoard: GameBoard, prediction: number | null) => {
     gameStatus
   );
 
-  const { ghostPos: pinkGhostPos } = useGhost(
+  const { ghostPos: pinkGhostPos, setGhostPos: setPinkGhostPos } = useGhost(
     Cell.PinkGhost,
     initialPinkGhostPos,
     gameBoard,
@@ -72,7 +95,7 @@ const usePacManGame = (gameBoard: GameBoard, prediction: number | null) => {
     gameStatus
   );
 
-  const { ghostPos: blueGhostPos } = useGhost(
+  const { ghostPos: blueGhostPos, setGhostPos: setBlueGhostPos } = useGhost(
     Cell.BlueGhost,
     initialBlueGhostPos,
     gameBoard,
@@ -82,7 +105,7 @@ const usePacManGame = (gameBoard: GameBoard, prediction: number | null) => {
     gameStatus
   );
 
-  const { ghostPos: orangeGhostPos } = useGhost(
+  const { ghostPos: orangeGhostPos, setGhostPos: setOrangeGhostPos } = useGhost(
     Cell.OrangeGhost,
     initialOrangeGhostPos,
     gameBoard,
@@ -120,6 +143,7 @@ const usePacManGame = (gameBoard: GameBoard, prediction: number | null) => {
     pacManDirection,
     handleDirectionChangeWithPrediction,
     gameStatus,
+    readyGame,
     startGame,
   };
 };

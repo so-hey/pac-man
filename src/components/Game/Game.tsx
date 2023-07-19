@@ -3,7 +3,7 @@ import usePacManGame from "../../hooks/usePacManGame";
 import Board from "../Board/Board";
 
 import { controllerDataset, train, predict, init } from "../../services/model";
-import { initialGameBoard as _initialGameBoard } from "./initialBoard";
+import { initialGameBoard } from "./initialBoard";
 import * as styles from "./Game.css";
 
 enum Cell {
@@ -35,16 +35,11 @@ enum GameStatus {
 type GameBoard = Cell[][];
 
 export default function Game() {
-  const [initialGameBoard] = useState<GameBoard>(
-    _initialGameBoard.map((row) => [...row])
-  );
   const [isTraining, setIsTraining] = useState(false);
 
   const [prediction, setPrediction] = useState<number | null>(null);
-  const { pacManDirection, gameStatus, startGame } = usePacManGame(
-    initialGameBoard,
-    prediction
-  );
+  const { gameBoard, pacManDirection, gameStatus, readyGame, startGame } =
+    usePacManGame(initialGameBoard, prediction);
 
   //
   const [sampleCountUp, setSampleCountUp] = useState(
@@ -93,7 +88,25 @@ export default function Game() {
       <div className={styles.container}>
         {gameStatus !== GameStatus.ReadyToStart && (
           <>
-            <Board board={initialGameBoard} direction={pacManDirection}></Board>
+            <div
+              onClick={() => {
+                readyGame();
+              }}
+              className={styles.backButton}
+            >
+              <p className={styles.underline}>Back</p>
+            </div>
+            <div
+              style={{
+                filter:
+                  gameStatus === GameStatus.GameClear ||
+                  gameStatus === GameStatus.GameOver
+                    ? "blur(2px)"
+                    : "none",
+              }}
+            >
+              <Board board={gameBoard} direction={pacManDirection}></Board>
+            </div>
             <div className={styles.message}>
               {gameStatus === GameStatus.Ready && (
                 <div className={styles.ready}>READY!</div>
@@ -105,16 +118,21 @@ export default function Game() {
                 <div className={styles.gameClear}>GAME CLEAR</div>
               )}
             </div>
-            {/* <div
+          </>
+        )}
+        {(gameStatus === GameStatus.GameOver ||
+          gameStatus === GameStatus.GameClear) && (
+          <>
+            <div
               onClick={() => {
-                setInitialGameBoard(originalBoard.map((row) => [...row]));
-                startGame();
                 const audio = new Audio("/pacman_intro.mp3");
                 audio.play();
+                startGame();
               }}
+              className={`${styles.restartButton} ${styles.underline}`}
             >
               RESTART
-            </div> */}
+            </div>
           </>
         )}
         {!isTraining && (
@@ -151,9 +169,9 @@ export default function Game() {
               onClick={() => {
                 setIsTraining(false);
               }}
-              className={styles.back}
+              className={styles.backButton}
             >
-              <p className={styles.backText}>Back</p>
+              <p className={styles.underline}>Back</p>
             </div>
 
             <div className={styles.field}>
