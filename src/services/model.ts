@@ -5,7 +5,6 @@ import { Dispatch } from "react";
 
 const NUM_CLASSES = 4;
 
-// TODO: add type of webcam
 let webcam: WebcamIterator;
 
 class ControllerDataset {
@@ -19,7 +18,10 @@ class ControllerDataset {
     this.exampleCount = Array(numClasses).fill(0);
   }
 
-  addExample(example: tf.Tensor, label: number) {
+  async addExample(label: number) {
+    const img = await getImage();
+    const example = truncatedMobileNet.predict(img);
+
     this.exampleCount[label]++;
 
     const y = tf.tidy(() =>
@@ -27,7 +29,7 @@ class ControllerDataset {
     );
 
     if (this.xs === undefined || this.ys === undefined) {
-      this.xs = tf.keep(example);
+      this.xs = tf.keep(example as tf.Tensor);
       this.ys = tf.keep(y);
     } else {
       const oldX = this.xs;
@@ -135,17 +137,13 @@ async function predict() {
 }
 
 async function getImage(): Promise<tf.Tensor<tf.Rank>> {
-  // if (!webcam) {
-  //   return;
-  // }
   const img = await webcam.capture();
   const processedImg = tf.tidy(() =>
     img.expandDims(0).toFloat().div(127).sub(1)
   );
   img.dispose();
 
-  const embedImg = truncatedMobileNet.predict(processedImg);
-  return embedImg as tf.Tensor<tf.Rank>;
+  return processedImg as tf.Tensor<tf.Rank>;
 }
 
 async function init() {
@@ -168,4 +166,4 @@ async function init() {
   screenShot.dispose();
 }
 
-export { controllerDataset, train, predict, getImage, init };
+export { controllerDataset, train, predict, init };

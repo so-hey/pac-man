@@ -2,13 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import usePacManGame from "../../hooks/usePacManGame";
 import Board from "../Board/Board";
 
-import {
-  controllerDataset,
-  train,
-  predict,
-  getImage,
-  init,
-} from "../../services/model";
+import { controllerDataset, train, predict, init } from "../../services/model";
 import { initialGameBoard as _initialGameBoard } from "./initialBoard";
 import * as styles from "./Game.css";
 
@@ -167,8 +161,7 @@ export default function Game() {
               <div
                 className={styles.box}
                 onClick={async () => {
-                  const img = await getImage();
-                  controllerDataset.addExample(img, 0);
+                  controllerDataset.addExample(0);
                   setSampleCountUp(controllerDataset.exampleCount[0]);
                 }}
                 style={{
@@ -183,8 +176,7 @@ export default function Game() {
               <div
                 className={styles.box}
                 onClick={async () => {
-                  const img = await getImage();
-                  controllerDataset.addExample(img, 2);
+                  controllerDataset.addExample(2);
                   setSampleCountLeft(controllerDataset.exampleCount[2]);
                 }}
                 style={{
@@ -212,8 +204,7 @@ export default function Game() {
               <div
                 className={styles.box}
                 onClick={async () => {
-                  const img = await getImage();
-                  controllerDataset.addExample(img, 3);
+                  controllerDataset.addExample(3);
                   setSampleCountRight(controllerDataset.exampleCount[3]);
                 }}
                 style={{
@@ -228,8 +219,7 @@ export default function Game() {
               <div
                 className={styles.box}
                 onClick={async () => {
-                  const img = await getImage();
-                  controllerDataset.addExample(img, 1);
+                  controllerDataset.addExample(1);
                   setSampleCountDown(controllerDataset.exampleCount[1]);
                 }}
                 style={{
