@@ -233,7 +233,8 @@ export default function Game() {
                 RIGHT
                 <p>{sampleCountRight}</p>
               </div>
-              <div className={styles.box}>OPTION</div>
+              {/* <div className={styles.box}>OPTION</div> */}
+              <div></div>
               <div
                 className={styles.box}
                 onClick={async () => {

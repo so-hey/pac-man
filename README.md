@@ -18,11 +18,11 @@ Our Pacman project written in [React](https://react.dev/) with [TypeScript](http
 
 ## Dependencies
 
+- React v18.2.0
 - VITE v4.4.4
-- React
-- Tensorflow.js
+- Tensorflow.js v4.9.0
   - Tensorflow.js / mobilenet
-- vanilla-extract
+- vanilla-extract v.3.8.2
 
 ## Setup
 
@@ -42,10 +42,4 @@ npm install
 
 ```zsh
 npm run dev
-```
-
-or
-
-```zsh
-npm run build
 ```
