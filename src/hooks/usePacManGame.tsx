@@ -3,9 +3,9 @@ import useGhost from "./useGhost";
 import usePacMan from "./usePacman";
 import { Cell, GameBoard, GameStatus } from "../components/Game/Game";
 import {
-  shadowBlinkyAI,
+  // shadowBlinkyAI,
   speedyPinkyAI,
-  bashfulInkyAI,
+  // bashfulInkyAI,
   pokeyClydeAI,
 } from "../services/ghostLogics";
 
@@ -58,9 +58,9 @@ const usePacManGame = (
   const startGame = (warmUpTime: number = 5000) => {
     setGameStatus(GameStatus.Ready);
     setGameBoard(originalGameBoard.map((row) => [...row]));
-    setRedGhostPos(initialRedGhostPos);
+    // setRedGhostPos(initialRedGhostPos);
     setPinkGhostPos(initialPinkGhostPos);
-    setBlueGhostPos(initialBlueGhostPos);
+    // setBlueGhostPos(initialBlueGhostPos);
     setOrangeGhostPos(initialOrangeGhostPos);
     setPacManPos(initialPacManPos);
     setTimeout(() => {
@@ -75,15 +75,15 @@ const usePacManGame = (
     handleDirectionChangeWithPrediction,
   } = usePacMan(initialPacManPos, gameBoard, gameStatus, prediction);
 
-  const { ghostPos: redGhostPos, setGhostPos: setRedGhostPos } = useGhost(
-    Cell.RedGhost,
-    initialRedGhostPos,
-    gameBoard,
-    pacManPos,
-    pacManDirection,
-    shadowBlinkyAI,
-    gameStatus
-  );
+  // const { ghostPos: redGhostPos, setGhostPos: setRedGhostPos } = useGhost(
+  //   Cell.RedGhost,
+  //   initialRedGhostPos,
+  //   gameBoard,
+  //   pacManPos,
+  //   pacManDirection,
+  //   shadowBlinkyAI,
+  //   gameStatus
+  // );
 
   const { ghostPos: pinkGhostPos, setGhostPos: setPinkGhostPos } = useGhost(
     Cell.PinkGhost,
@@ -95,15 +95,15 @@ const usePacManGame = (
     gameStatus
   );
 
-  const { ghostPos: blueGhostPos, setGhostPos: setBlueGhostPos } = useGhost(
-    Cell.BlueGhost,
-    initialBlueGhostPos,
-    gameBoard,
-    pacManPos,
-    pacManDirection,
-    bashfulInkyAI,
-    gameStatus
-  );
+  // const { ghostPos: blueGhostPos, setGhostPos: setBlueGhostPos } = useGhost(
+  //   Cell.BlueGhost,
+  //   initialBlueGhostPos,
+  //   gameBoard,
+  //   pacManPos,
+  //   pacManDirection,
+  //   bashfulInkyAI,
+  //   gameStatus
+  // );
 
   const { ghostPos: orangeGhostPos, setGhostPos: setOrangeGhostPos } = useGhost(
     Cell.OrangeGhost,
@@ -116,9 +116,9 @@ const usePacManGame = (
   );
 
   const ghostPositions = [
-    redGhostPos,
+    // redGhostPos,
     pinkGhostPos,
-    blueGhostPos,
+    // blueGhostPos,
     orangeGhostPos,
   ];
 
