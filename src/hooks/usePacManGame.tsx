@@ -19,23 +19,23 @@ const usePacManGame = (
   );
 
   let initialPacManPos = { x: -1, y: -1 };
-  let initialRedGhostPos = { x: -1, y: -1 };
+  // let initialRedGhostPos = { x: -1, y: -1 };
   let initialPinkGhostPos = { x: -1, y: -1 };
-  let initialBlueGhostPos = { x: -1, y: -1 };
+  // let initialBlueGhostPos = { x: -1, y: -1 };
   let initialOrangeGhostPos = { x: -1, y: -1 };
 
   for (let y = 0; y < initialGameBoard.length; y++) {
     for (let x = 0; x < initialGameBoard[y].length; x++) {
       switch (initialGameBoard[y][x]) {
-        case Cell.RedGhost:
-          initialRedGhostPos = { x, y };
-          break;
+        // case Cell.RedGhost:
+        //   initialRedGhostPos = { x, y };
+        //   break;
         case Cell.PinkGhost:
           initialPinkGhostPos = { x, y };
           break;
-        case Cell.BlueGhost:
-          initialBlueGhostPos = { x, y };
-          break;
+        // case Cell.BlueGhost:
+        //   initialBlueGhostPos = { x, y };
+        //   break;
         case Cell.OrangeGhost:
           initialOrangeGhostPos = { x, y };
           break;
