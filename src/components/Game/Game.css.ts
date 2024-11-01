@@ -30,6 +30,13 @@ export const field = style({
   gap: "10px",
 });
 
+export const miniField = style({
+  display: "grid",
+  gridTemplateColumns: "repeat(3, 1fr)",
+  gridTemplateRows: "repeat(3, 1fr)",
+  gap: "4px",
+});
+
 export const container = style({});
 
 export const ready = style({});

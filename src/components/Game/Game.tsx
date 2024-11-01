@@ -93,8 +93,85 @@ export default function Game() {
                 readyGame();
               }}
               className={styles.backButton}
+              style={{ display: "flex" }}
             >
               <p className={styles.underline}>Back</p>
+              <div
+                style={{ width: "40%", margin: "0 auto" }}
+                className={styles.miniField}
+              >
+                <div></div>
+                <div
+                  className={styles.box}
+                  onClick={async () => {
+                    controllerDataset.addExample(0);
+                    setSampleCountUp(controllerDataset.exampleCount[0]);
+                  }}
+                  style={{
+                    border:
+                      prediction === 0 ? "1px solid green" : "1px solid white",
+                  }}
+                >
+                  UP
+                </div>
+                <div></div>
+                <div
+                  className={styles.box}
+                  onClick={async () => {
+                    controllerDataset.addExample(2);
+                    setSampleCountLeft(controllerDataset.exampleCount[2]);
+                  }}
+                  style={{
+                    border:
+                      prediction === 2 ? "1px solid green" : "1px solid white",
+                  }}
+                >
+                  LEFT
+                </div>
+
+                <video
+                  id="webcamDummy"
+                  autoPlay
+                  playsInline
+                  muted
+                  height={128}
+                  width={128}
+                  style={{
+                    width: "64px",
+                    height: "64px",
+                    WebkitTransform: "scaleX(-1)",
+                  }}
+                />
+                <div
+                  className={styles.box}
+                  onClick={async () => {
+                    controllerDataset.addExample(3);
+                    setSampleCountRight(controllerDataset.exampleCount[3]);
+                  }}
+                  style={{
+                    fontSize: "16px",
+                    border:
+                      prediction === 3 ? "1px solid green" : "1px solid white",
+                  }}
+                >
+                  RIGHT
+                </div>
+                {/* <div className={styles.box}>OPTION</div> */}
+                <div></div>
+                <div
+                  className={styles.box}
+                  onClick={async () => {
+                    controllerDataset.addExample(1);
+                    setSampleCountDown(controllerDataset.exampleCount[1]);
+                  }}
+                  style={{
+                    border:
+                      prediction === 1 ? "1px solid green" : "1px solid white",
+                  }}
+                >
+                  DOWN
+                </div>
+              </div>
             </div>
             <div
               style={{
